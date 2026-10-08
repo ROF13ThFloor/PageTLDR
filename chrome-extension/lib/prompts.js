@@ -72,12 +72,19 @@ function buildSystemPrompt(settings) {
   ].join("\n");
 }
 
+// Text from a page could contain our own tags, like "</document>", to make
+// the rest of it look like it comes from us and not from the page. So we
+// break every <document> and <selected_text> tag inside it: "<" becomes "[".
+function breakOurTags(text) {
+  return text.replace(/<\s*(\/?\s*(document|selected_text))/gi, "[$1");
+}
+
 // Wraps the document text in clear tags, so Claude can tell the document
 // apart from our instructions.
 function buildDocumentBlock(title, text) {
-  // A double quote in the title would break the title="..." part.
-  const safeTitle = (title || "Untitled").replace(/"/g, "'");
-  return `<document title="${safeTitle}">\n${text}\n</document>`;
+  // A double quote or "<" ">" in the title would break the title="..." part.
+  const safeTitle = (title || "Untitled").replace(/"/g, "'").replace(/[<>]/g, "");
+  return `<document title="${safeTitle}">\n${breakOurTags(text)}\n</document>`;
 }
 
 // The request for the reading notes (answer must follow NOTES_SCHEMA).
@@ -98,7 +105,7 @@ function buildExplainRequest(selectedText) {
     "Explain this part of the document in plain words. Say what it means and why it matters in the document.",
     "",
     "<selected_text>",
-    selectedText,
+    breakOurTags(selectedText),
     "</selected_text>",
   ].join("\n");
 }

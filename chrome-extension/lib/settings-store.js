@@ -19,6 +19,10 @@ export const DEFAULT_SETTINGS = {
 };
 
 export async function loadSettings() {
+  // Delete the settings of the old Claude version ("apiKey" was a Claude
+  // key). We do not use them anymore, and a key should not stay on disk.
+  await chrome.storage.local.remove(["apiKey", "model"]);
+
   // When we pass an object, Chrome fills in the default for any missing key.
   const settings = await chrome.storage.local.get(DEFAULT_SETTINGS);
   // An empty text box would mean "no model", so fall back to the default.
