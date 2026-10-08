@@ -60,7 +60,7 @@ function buildSystemPrompt(settings) {
     : "Use clear and precise language.";
 
   return [
-    "You are Reading Lens, a reading helper. You help the user read and understand one document: a web page or a research paper.",
+    "You are pageTLDR, a reading helper. You help the user read and understand one document: a web page or a research paper.",
     "",
     "Rules:",
     "- Use only facts from the document. Do not add facts from outside the document.",

@@ -1,9 +1,9 @@
-# Reading Lens
+# pageTLDR
 
 An AI reading helper that uses the Claude API.
 It helps you read and understand web pages and research papers.
 
-It has two parts:
+<!-- It has two parts:
 
 | Part | Folder | What it does |
 |---|---|---|
@@ -29,4 +29,4 @@ never in the code or in git.
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE). -->

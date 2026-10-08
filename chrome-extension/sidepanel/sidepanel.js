@@ -20,7 +20,7 @@ const CANT_READ_MESSAGE =
 const NO_TEXT_MESSAGE =
   "This page has no text to read. It may be only images or video, or a PDF file.";
 const LONG_PAGE_MESSAGE =
-  "Note: this page is very long, so Reading Lens read only the first part of it.";
+  "Note: this page is very long, so pageTLDR read only the first part of it.";
 
 // We keep one "page" object per tab:
 //   { tabId, url, title, text, wasCut, notes, chat, status,
@@ -279,7 +279,7 @@ async function init() {
   });
   chrome.tabs.onRemoved.addListener((tabId) => pages.delete(tabId));
 
-  // Right-click "Explain with Reading Lens", while the panel is open...
+  // Right-click "Explain with pageTLDR", while the panel is open...
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area === "session" && changes.pendingExplain?.newValue) {
       handleExplainRequest(changes.pendingExplain.newValue);

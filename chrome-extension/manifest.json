@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Reading Lens",
+  "name": "pageTLDR",
   "version": "0.1.0",
   "description": "An AI reading helper: summary, key points, hard words, and questions for any web page.",
   "minimum_chrome_version": "116",
@@ -11,7 +11,7 @@
     "128": "icons/icon-128.png"
   },
   "action": {
-    "default_title": "Open Reading Lens"
+    "default_title": "Open pageTLDR"
   },
   "background": {
     "service_worker": "background.js",

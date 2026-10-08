@@ -34,7 +34,7 @@ export function notesToMarkdown(page) {
   if (chat.length > 0) {
     lines.push("## Chat", "");
     for (const turn of chat) {
-      const who = turn.role === "user" ? "**You:**" : "**Reading Lens:**";
+      const who = turn.role === "user" ? "**You:**" : "**pageTLDR:**";
       lines.push(`${who} ${turn.text}`, "");
     }
   }

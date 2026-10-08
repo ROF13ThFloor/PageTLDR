@@ -30,7 +30,7 @@ export async function readPageText(tabId) {
   } catch (error) {
     // Happens for pages Chrome protects, or for local files when
     // "Allow access to file URLs" is off.
-    throw new Error("Chrome does not let Reading Lens read this page.");
+    throw new Error("Chrome does not let pageTLDR read this page.");
   }
 
   const text = results[0]?.result || "";
@@ -55,7 +55,7 @@ export async function highlightQuote(tabId, quote) {
   // (Adding the same rule again on each click does no harm.)
   await chrome.scripting.insertCSS({
     target: { tabId },
-    css: "::highlight(reading-lens) { background-color: #ffeb3b; color: #000; }",
+    css: "::highlight(pagetldr) { background-color: #ffeb3b; color: #000; }",
   });
 
   const results = await chrome.scripting.executeScript({
@@ -128,7 +128,7 @@ function highlightInPage(quote) {
     range.setEnd(last.node, last.offset + 1);
 
     // Step 4: mark it (this replaces the old mark) and scroll to it.
-    CSS.highlights.set("reading-lens", new Highlight(range));
+    CSS.highlights.set("pagetldr", new Highlight(range));
     first.node.parentElement.scrollIntoView({ behavior: "smooth", block: "center" });
     return true;
   }
