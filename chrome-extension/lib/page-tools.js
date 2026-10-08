@@ -109,7 +109,7 @@ function highlightInPage(quote) {
   }
   const pageText = letters.join("");
 
-  // Step 2: look for the quote. Claude sometimes changes a word or two, so
+  // Step 2: look for the quote. The model sometimes changes a word or two, so
   // if the full quote is not found, we try only its beginning, then only
   // its end.
   const words = simplify(quote).split(/\s+/).filter(Boolean);

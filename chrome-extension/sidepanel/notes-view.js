@@ -1,6 +1,6 @@
 // notes-view.js — shows the notes (summary, key points, words, questions).
 //
-// Safety rule: text from the page or from Claude is only ever put in with
+// Safety rule: text from the page or from the model is only ever put in with
 // textContent, never as HTML. So even if the text contains something like
 // <script>, it is shown as plain letters and never runs.
 

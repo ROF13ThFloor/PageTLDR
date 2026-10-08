@@ -18,7 +18,7 @@ export function renderChat(chat) {
   chatLog.lastElementChild?.scrollIntoView({ block: "nearest" });
 }
 
-// While Claude is answering, stop the user from sending more questions.
+// While the model is answering, stop the user from sending more questions.
 export function setChatBusy(isBusy) {
   sendButton.disabled = isBusy;
   sendButton.textContent = isBusy ? "…" : "Send";

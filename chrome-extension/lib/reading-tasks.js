@@ -1,10 +1,10 @@
-// reading-tasks.js — the three things we ask Claude to do:
+// reading-tasks.js — the three things we ask the model to do:
 //   1. makeNotes:        summary, key points, words, questions
 //   2. askAboutPage:     answer a chat question
 //   3. explainSelection: explain text the user selected
-// Each one puts the prompts (prompts.js) together and calls askClaude.
+// Each one puts the prompts (prompts.js) together and calls askModel.
 
-import { askClaude } from "./claude-api.js";
+import { askModel, ModelError } from "./openrouter-api.js";
 import {
   NOTES_SCHEMA,
   NOTES_REQUEST,
@@ -13,31 +13,60 @@ import {
   buildExplainRequest,
 } from "./prompts.js";
 
+// Many free models cannot be forced to follow NOTES_SCHEMA, so we also
+// describe the JSON in words. (This is added here, not in prompts.js,
+// because prompts.js must stay the same as the Zotero plugin's copy.)
+const JSON_REQUEST = [
+  "Answer with only one JSON object and nothing else: no Markdown, no ``` fences, no text before or after it.",
+  "The JSON must follow this JSON Schema:",
+  JSON.stringify(NOTES_SCHEMA),
+].join("\n");
+
 // The first user message always starts with the same document block.
-// "cache_control" asks the API to remember (cache) this part for a few
-// minutes. Then the chat questions that follow are faster and cheaper,
-// because Claude does not need to read the whole page again.
 function documentContent(page) {
-  return {
-    type: "text",
-    text: buildDocumentBlock(page.title, page.text),
-    cache_control: { type: "ephemeral" },
-  };
+  return { type: "text", text: buildDocumentBlock(page.title, page.text) };
 }
 
 // page: { title, text }. Returns { summary, keyPoints, words, questions }.
 export async function makeNotes(settings, page) {
-  return askClaude({
+  const notes = await askModel({
     settings,
     system: buildSystemPrompt(settings),
     messages: [
       {
         role: "user",
-        content: [documentContent(page), { type: "text", text: NOTES_REQUEST }],
+        content: [documentContent(page), { type: "text", text: `${NOTES_REQUEST}\n\n${JSON_REQUEST}` }],
       },
     ],
     jsonSchema: NOTES_SCHEMA,
   });
+  return cleanNotes(notes);
+}
+
+// Models that do not follow the schema exactly may leave out fields or use
+// the wrong types. This keeps only what the panel can show, so a slightly
+// wrong answer still works and a very wrong one gives a clear error.
+function cleanNotes(notes) {
+  const text = (value) => (typeof value === "string" ? value.trim() : "");
+  const list = (value) => (Array.isArray(value) ? value : []);
+
+  const cleaned = {
+    summary: text(notes?.summary),
+    keyPoints: list(notes?.keyPoints)
+      .map((item) => ({ point: text(item?.point), quote: text(item?.quote), page: text(item?.page) }))
+      .filter((item) => item.point),
+    words: list(notes?.words)
+      .map((item) => ({ word: text(item?.word), meaning: text(item?.meaning) }))
+      .filter((item) => item.word && item.meaning),
+    questions: list(notes?.questions).map(text).filter(Boolean),
+  };
+
+  if (!cleaned.summary && cleaned.keyPoints.length === 0) {
+    throw new ModelError(
+      "The model's answer was not in the expected format. Please try again, or choose another model in Settings (⚙)."
+    );
+  }
+  return cleaned;
 }
 
 // history: earlier chat turns, [{ role: "user" | "assistant", text }].
@@ -56,16 +85,16 @@ export async function askAboutPage(settings, page, history, question) {
     return { role: turn.role, content: turn.text };
   });
 
-  return askClaude({ settings, system: buildSystemPrompt(settings), messages });
+  return askModel({ settings, system: buildSystemPrompt(settings), messages });
 }
 
 // page may have no text (for example, if Chrome did not let us read it).
-// Then Claude explains the selected text alone.
+// Then the model explains the selected text alone.
 export async function explainSelection(settings, page, selectedText) {
   const request = { type: "text", text: buildExplainRequest(selectedText) };
   const content = page.text ? [documentContent(page), request] : [request];
 
-  return askClaude({
+  return askModel({
     settings,
     system: buildSystemPrompt(settings),
     messages: [{ role: "user", content }],

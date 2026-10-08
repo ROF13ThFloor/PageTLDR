@@ -126,8 +126,8 @@ function setStatus(page, text, kind = "info") {
 async function readPage(page) {
   if (page.notesBusy) return;
   const settings = await loadSettings();
-  if (!settings.apiKey) {
-    setStatus(page, "Please add your Claude API key in Settings (⚙) first.", "error");
+  if (!settings.openrouterKey) {
+    setStatus(page, "Please add your OpenRouter API key in Settings (⚙) first.", "error");
     return;
   }
 
@@ -137,7 +137,7 @@ async function readPage(page) {
   try {
     setStatus(page, "Reading the page…");
     await ensurePageText(page);
-    setStatus(page, "Claude is making notes… This can take up to a minute.");
+    setStatus(page, "The AI is making notes… This can take up to a minute.");
     page.notes = await makeNotes(settings, page);
     setStatus(page, page.wasCut ? LONG_PAGE_MESSAGE : null);
   } catch (error) {
@@ -153,7 +153,7 @@ async function readPage(page) {
 async function runChatTurn(page, userText, getAnswer) {
   if (page.chatBusy) return;
 
-  // Only finished question/answer pairs go to Claude as history.
+  // Only finished question/answer pairs go to the model as history.
   const history = page.chat.filter((turn) => turn.role !== "error" && !turn.failed);
   const userTurn = { role: "user", text: userText };
   page.chat.push(userTurn);
@@ -227,7 +227,7 @@ async function showActiveTab() {
   const settings = await loadSettings();
   const shouldAutoRead =
     settings.autoRead &&
-    settings.apiKey &&
+    settings.openrouterKey &&
     tab.status === "complete" &&
     canReadUrl(tab.url) &&
     !page.notes &&

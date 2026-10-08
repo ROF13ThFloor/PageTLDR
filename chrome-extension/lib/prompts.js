@@ -1,4 +1,4 @@
-// prompts.js — the instructions ("prompts") we send to Claude.
+// prompts.js — the instructions ("prompts") we send to the model.
 //
 // IMPORTANT: there are TWO copies of this text:
 //   - chrome-extension/lib/prompts.js     (this file)

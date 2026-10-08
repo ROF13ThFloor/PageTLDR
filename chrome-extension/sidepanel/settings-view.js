@@ -8,8 +8,8 @@ const form = document.getElementById("settings-form");
 const savedMessage = document.getElementById("settings-saved");
 
 const fields = {
-  apiKey: document.getElementById("setting-api-key"),
-  model: document.getElementById("setting-model"),
+  openrouterKey: document.getElementById("setting-api-key"),
+  openrouterModel: document.getElementById("setting-model"),
   language: document.getElementById("setting-language"),
   simpleWords: document.getElementById("setting-simple-words"),
   autoRead: document.getElementById("setting-auto-read"),
@@ -28,8 +28,8 @@ export function initSettingsView(onClose) {
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     await saveSettings({
-      apiKey: fields.apiKey.value.trim(),
-      model: fields.model.value.trim(),
+      openrouterKey: fields.openrouterKey.value.trim(),
+      openrouterModel: fields.openrouterModel.value.trim(),
       language: fields.language.value.trim(),
       simpleWords: fields.simpleWords.checked,
       autoRead: fields.autoRead.checked,
@@ -42,8 +42,8 @@ export function initSettingsView(onClose) {
 async function openSettings() {
   // Load fresh values each time, so the form always shows what is saved.
   const settings = await loadSettings();
-  fields.apiKey.value = settings.apiKey;
-  fields.model.value = settings.model;
+  fields.openrouterKey.value = settings.openrouterKey;
+  fields.openrouterModel.value = settings.openrouterModel;
   fields.language.value = settings.language;
   fields.simpleWords.checked = settings.simpleWords;
   fields.autoRead.checked = settings.autoRead;
