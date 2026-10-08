@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reading Lens</title>
+    <link rel="stylesheet" href="sidepanel.css" />
+  </head>
+  <body>
+    <!-- ===== Main view: notes and chat ===== -->
+    <main id="main-view">
+      <header class="toolbar">
+        <h1>Reading Lens</h1>
+        <div class="toolbar-buttons">
+          <button id="read-button" type="button" title="Read this page and make notes">Read page</button>
+          <button id="save-button" type="button" title="Download the notes as a Markdown file" disabled>Save notes</button>
+          <button id="settings-button" type="button" title="Settings" aria-label="Settings">⚙</button>
+        </div>
+      </header>
+
+      <p id="page-title" class="page-title"></p>
+
+      <!-- Messages for the user: "working...", errors, tips. -->
+      <p id="status" class="status" role="status" hidden></p>
+
+      <!-- The notes. Hidden until we have notes for this page. -->
+      <div id="notes" hidden>
+        <section>
+          <h2>Summary</h2>
+          <p id="summary"></p>
+        </section>
+        <section>
+          <h2>Key points</h2>
+          <p class="hint">Click a point to find it on the page.</p>
+          <ul id="key-points" class="clickable-list"></ul>
+        </section>
+        <section>
+          <h2>Words to know</h2>
+          <dl id="words"></dl>
+        </section>
+        <section>
+          <h2>Questions</h2>
+          <p class="hint">Click a question to ask it in the chat.</p>
+          <ul id="questions" class="clickable-list"></ul>
+        </section>
+      </div>
+
+      <!-- Chat about the page. -->
+      <section id="chat" class="chat">
+        <h2>Chat</h2>
+        <div id="chat-log" class="chat-log" aria-live="polite"></div>
+        <form id="chat-form" class="chat-form">
+          <textarea id="chat-input" rows="2" placeholder="Ask a question about this page…"></textarea>
+          <button id="chat-send" type="submit">Send</button>
+        </form>
+      </section>
+    </main>
+
+    <!-- ===== Settings view ===== -->
+    <section id="settings-view" hidden>
+      <header class="toolbar">
+        <h1>Settings</h1>
+        <div class="toolbar-buttons">
+          <button id="settings-back" type="button">Back</button>
+        </div>
+      </header>
+
+      <form id="settings-form" class="settings-form">
+        <label>
+          Claude API key
+          <input id="setting-api-key" type="password" autocomplete="off" placeholder="sk-ant-…" />
+          <small>Saved only in this browser. Get a key at platform.claude.com.</small>
+        </label>
+
+        <label>
+          Model name
+          <input id="setting-model" type="text" />
+        </label>
+
+        <label>
+          Answer language
+          <input id="setting-language" type="text" placeholder="English" />
+          <small>Notes come in this language, even if the page is in another language.</small>
+        </label>
+
+        <label class="checkbox">
+          <input id="setting-simple-words" type="checkbox" />
+          Use simple words
+        </label>
+
+        <label class="checkbox">
+          <input id="setting-auto-read" type="checkbox" />
+          Read each new page by itself
+        </label>
+        <small>When this is off, the page is read only when you click “Read page”.</small>
+
+        <div class="settings-buttons">
+          <button type="submit">Save settings</button>
+          <span id="settings-saved" class="saved-message" hidden>Saved ✓</span>
+        </div>
+      </form>
+    </section>
+
+    <!-- type="module" lets us use import/export without any build tool. -->
+    <script type="module" src="sidepanel.js"></script>
+  </body>
+</html>

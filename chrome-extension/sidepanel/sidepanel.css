@@ -1,0 +1,251 @@
+/* sidepanel.css — the look of the side panel.
+   All colors are variables, so dark mode only needs to change the variables. */
+
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f3f4f6;
+  --text: #1f2328;
+  --text-soft: #59636e;
+  --border: #d1d9e0;
+  --accent: #0b57d0;
+  --accent-text: #ffffff;
+  --mark: #fff3a3;
+  --error-bg: #fde7e9;
+  --error-text: #8a1c25;
+  --info-bg: #e8f0fe;
+  --info-text: #174ea6;
+  color-scheme: light dark;
+}
+
+/* Dark mode follows the computer's setting. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1f1f1f;
+    --bg-soft: #2b2b2b;
+    --text: #e6e6e6;
+    --text-soft: #a8a8a8;
+    --border: #444444;
+    --accent: #8ab4f8;
+    --accent-text: #1f1f1f;
+    --mark: #5c5200;
+    --error-bg: #4a1d22;
+    --error-text: #ffb4ba;
+    --info-bg: #1d2b45;
+    --info-text: #c2d7ff;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0 12px 12px;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.5 system-ui, sans-serif;
+}
+
+h1 {
+  font-size: 16px;
+  margin: 0;
+}
+
+h2 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-soft);
+  margin: 16px 0 6px;
+}
+
+button {
+  font: inherit;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-soft);
+  color: var(--text);
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+input[type="text"],
+input[type="password"],
+textarea {
+  font: inherit;
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ----- Top bar ----- */
+
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.toolbar-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.page-title {
+  color: var(--text-soft);
+  font-size: 12px;
+  margin: 8px 0 0;
+  overflow-wrap: anywhere;
+}
+
+/* ----- Status messages ----- */
+
+.status {
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--info-bg);
+  color: var(--info-text);
+  white-space: pre-wrap;
+}
+
+.status.error {
+  background: var(--error-bg);
+  color: var(--error-text);
+}
+
+.hint {
+  margin: 0 0 6px;
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
+/* ----- Notes ----- */
+
+.clickable-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.clickable-list li + li {
+  margin-top: 6px;
+}
+
+/* Key points and questions are buttons, so they work with the keyboard too. */
+.clickable-list button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--bg-soft);
+  border-color: transparent;
+}
+
+.clickable-list button:hover {
+  border-color: var(--accent);
+}
+
+.clickable-list button.found {
+  background: var(--mark);
+}
+
+dl {
+  margin: 0;
+}
+
+dt {
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+dd {
+  margin: 0 0 0 12px;
+}
+
+/* ----- Chat ----- */
+
+.chat-log {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.chat-message {
+  padding: 6px 10px;
+  border-radius: 8px;
+  white-space: pre-wrap; /* keep line breaks from Claude's answer */
+  overflow-wrap: anywhere;
+}
+
+.chat-message.user {
+  align-self: flex-end;
+  max-width: 85%;
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+.chat-message.assistant {
+  background: var(--bg-soft);
+}
+
+.chat-message.error {
+  background: var(--error-bg);
+  color: var(--error-text);
+}
+
+.chat-form {
+  display: flex;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+/* ----- Settings ----- */
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 12px;
+}
+
+.settings-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-form label.checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.settings-form small {
+  color: var(--text-soft);
+}
+
+.settings-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.saved-message {
+  color: var(--text-soft);
+}

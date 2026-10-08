@@ -1,0 +1,25 @@
+# Built packages. We make these with the scripts in scripts/,
+# so they never need to be in git.
+dist/
+*.zip
+*.xpi
+
+# Secrets. The API key is typed into the app's settings and is never
+# stored in a file, but we block these names just in case.
+.env
+.env.*
+*.key
+secrets.*
+
+# Editor and system files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+
+# Not tracked in this repo
+zotero-plugin/
+docs/
+scripts/
